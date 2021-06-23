@@ -17,6 +17,17 @@ class Api::V1::RecipesController < Api::V1::BaseController
     end
   end
 
+  def create
+    @recipe = Recipe.new(recipe_params)
+    @recipe.user = current_user
+    authorize @recipe
+    if @recipe.save
+      render :show, status: :created
+    else
+      render_error
+    end
+  end
+
   private
 
   def set_recipe
